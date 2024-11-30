@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang=en>
+<head>
+    <meta charset=utf-8>
+    <title>
+        {{ title }}
+    </title>
+</head>
+<body>
+    <img class="cameraFeed" src="" style="height: 100%; width: 100%; object-fit: contain" />
+</body>
+<script>
+    const refreshImage = (imgElement, imgURL) => () =>
+    imgElement.src = imgURL + "?" + new Date().getTime();
+
+    const cameraFeed = document.querySelector(".cameraFeed");
+    setInterval(refreshImage(cameraFeed, "{{ image }}"), 5000);
+</script>
+</html>

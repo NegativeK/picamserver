@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang=en>
+<head>
+	<meta charset=utf-8>
+	<title>
+	{{ title }}
+	</title>
+</head>
+<body>
+	<img class="cameraFeed" src="" style="height: 100%; width: 100%; object-fit: contain" />
+	<div class="loadingStatus">Loading...</div>
+</body>
+<script>
+	const loadingDiv = document.querySelector(".loadingStatus");
+	const cameraFeed = document.querySelector(".cameraFeed");
+
+	function refreshImage(imgURL) {
+		time = new Date().getTime();
+		cameraFeed.src = imgURL + "?" + time;
+		loadingDiv.innerHTML = time;
+	}
+
+	setInterval(refreshImage, 5000, "{{ image }}");
+</script>
+</html>

@@ -1,5 +1,10 @@
 Don't use this; it's gross.
 
+# But Why
+It's a simple web server. It lets you view a Pi camera via a web page that
+refreshes every few seconds. It's currently hackish and shouldn't be run in
+any environment that matters.
+
 # Installation
 
 ```

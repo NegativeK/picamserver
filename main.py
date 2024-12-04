@@ -2,6 +2,7 @@
 import io
 import os
 import time
+import uuid
 
 import flask
 import picamera2

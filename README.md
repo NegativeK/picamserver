@@ -1,10 +1,13 @@
-# Installation
-## picamera2
-(From https://pypi.org/project/picamera2/ )
-sudo apt install -y python3-picamera2
+Don't use this; it's gross.
 
-(From https://forums.raspberrypi.com/viewtopic.php?t=361758 )
-python3 -m venv --system-site-packages env
+# Installation
+
+sudo apt install -y python3-picamera2 # From https://pypi.org/project/picamera2/
+
+python3 -m venv --system-site-packages env # From https://forums.raspberrypi.com/viewtopic.php?t=361758
+
+. venv/bin/activate
+pip install -r requirements.txt
 
 # TODO
 * Scale down the image via GET parameters

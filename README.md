@@ -4,7 +4,7 @@ Don't use this; it's gross.
 
 sudo apt install -y python3-picamera2 # From https://pypi.org/project/picamera2/
 
-python3 -m venv --system-site-packages env # From https://forums.raspberrypi.com/viewtopic.php?t=361758
+python3 -m venv --system-site-packages venv # From https://forums.raspberrypi.com/viewtopic.php?t=361758
 
 . venv/bin/activate
 pip install -r requirements.txt

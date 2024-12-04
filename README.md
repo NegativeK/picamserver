@@ -1,3 +1,5 @@
+Don't use this; it's gross.
+
 # Installation
 
 sudo apt install -y python3-picamera2 # From https://pypi.org/project/picamera2/

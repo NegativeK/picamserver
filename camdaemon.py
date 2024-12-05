@@ -1,13 +1,9 @@
 #!/usr/bin/env python
-import pathlib
 import time
 
 import picamera2
 
-# TODO: These should be absolute and configured by the user.
-LISTENER_PATH = pathlib.Path("./listeners")
-IMAGE_FILE = pathlib.Path("./data/photo.jpg")
-REFRESH_INTERVAL = 2
+import config
 
 
 def picam2_setup(picam2: picamera2.Picamera2) -> None:
@@ -30,7 +26,7 @@ def picam2_setup(picam2: picamera2.Picamera2) -> None:
 
 
 def web_listening() -> bool:
-    has_files = not any(LISTENER_PATH.iterdir())
+    has_files = not any(config.LISTENER_PATH.iterdir())
 
     return has_files
 
@@ -40,9 +36,9 @@ def run_camera_loop(picam2: picamera2.Picamera2) -> None:
         if web_listening():
             picam2_setup(picam2)
             image = picam2.capture_image()
-            image.save(IMAGE_FILE, "JPEG")
+            image.save(config.IMAGE_FILE, "JPEG")
 
-        time.sleep(REFRESH_INTERVAL)
+        time.sleep(config.REFRESH_INTERVAL)
 
 
 def main() -> None:

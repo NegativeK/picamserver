@@ -1,3 +1,3 @@
 #!/bin/bash
-cd ~/camserver
+cd ~/picamserver
 screen ./run.sh

@@ -8,6 +8,7 @@ import dotenv
 # TODO: These should be absolute (?) and configured by the user.
 IMAGE_FILE = pathlib.Path("./data/photo.jpg")
 LISTENER_PATH = pathlib.Path("./listeners")
+LISTENER_AGE_SECONDS = 30
 REFRESH_INTERVAL = 2
 
 def get_session_key() -> str:

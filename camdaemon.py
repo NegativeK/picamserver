@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import datetime
 import time
 
 import picamera2
@@ -26,7 +27,20 @@ def picam2_setup(picam2: picamera2.Picamera2) -> None:
 
 
 def web_listening() -> bool:
-    has_files = not any(config.LISTENER_PATH.iterdir())
+    current_time = datetime.datetime.now()
+    oldest_session_time = current_time - datetime.timedelta(
+        seconds=config.LISTENER_AGE_SECONDS,
+    )
+
+    for session_file in config.LISTENER_PATH.iterdir():
+        session_contents = session_file.read_text()
+        session_timestamp = datetime.datetime.fromisoformat(session_contents)
+
+        if session_timestamp < oldest_session_time:
+            # TODO Log this
+            session_file.unlink()
+
+    has_files = any(config.LISTENER_PATH.iterdir())
 
     return has_files
 

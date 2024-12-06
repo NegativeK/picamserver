@@ -12,9 +12,9 @@ app.secret_key = b"INSECUREINSECUREINSECUREINSECURE"
 
 def ensure_listener_file():
     if "listener" not in flask.session:
-        flask.session["listener"] = uuid.uuid4()
+        flask.session["listener"] = str(uuid.uuid4())
 
-    now = datetime.datetime.now()
+    now = str(datetime.datetime.now())
     listener_file = config.LISTENER_PATH / flask.session["listener"]
     listener_file.write_text(now)
 

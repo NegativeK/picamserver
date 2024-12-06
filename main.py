@@ -7,7 +7,7 @@ import config
 
 app = flask.Flask(__name__)
 # TODO Secure this.
-app.secret_key = b"INSECUREINSECUREINSECUREINSECURE"
+app.secret_key = config.get_session_key()
 
 
 def ensure_listener_file():

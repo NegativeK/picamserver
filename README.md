@@ -28,9 +28,3 @@ warned you that this is gross.)
 
 # Todo
 * Scale down the image via GET parameters
-* Save the image (in /run/shm?) and let clients load that
-    * Each session stores a unique timestamped file in a directory
-    * If the directory has any files, the camera daemon takes photos and
-      updates the image file
-    * Sessions clean up their timestamped file
-    * The camera daemon removes timestamped files that are too old

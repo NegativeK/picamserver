@@ -1,3 +1,4 @@
 #!/bin/bash
 cd ~/picamserver
-screen ./run.sh
+screen -d -m ./run_flask.sh
+screen -d -m ./run_cam.sh

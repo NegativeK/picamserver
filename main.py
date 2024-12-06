@@ -1,20 +1,26 @@
 #!/usr/bin/env python
+import datetime
 import flask
+import uuid
 
 import config
 
 app = flask.Flask(__name__)
+# TODO Secure this.
+app.secret_key = b"INSECUREINSECUREINSECUREINSECURE"
 
 
-def ensure_listener():
+def ensure_listener_file():
     if "listener" not in flask.session:
-        # Create a file in LISTENER_PATH named uuid, contents timestamp
-        pass
+        flask.session["listener"] = uuid.uuid4()
+
+    now = datetime.datetime.now()
+    listener_file = config.LISTENER_PATH / flask.session["listener"]
+    listener_file.write_text(now)
 
 
 @app.get("/")
 def get_root():
-    ensure_listener()
     title = "Printer"
     image_request_path = "./printer"
 
@@ -27,6 +33,8 @@ def get_root():
 
 @app.get("/printer")
 def get_print_image():
+    ensure_listener_file()
+
     return flask.send_from_directory(
         config.IMAGE_FILE.parent,
         config.IMAGE_FILE.name,

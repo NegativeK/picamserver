@@ -48,7 +48,6 @@ def web_listening() -> bool:
 def run_camera_loop(picam2: picamera2.Picamera2) -> None:
     while True:
         if web_listening():
-            picam2_setup(picam2)
             image = picam2.capture_image()
             image.save(config.IMAGE_FILE, "JPEG")
 
@@ -57,6 +56,7 @@ def run_camera_loop(picam2: picamera2.Picamera2) -> None:
 
 def main() -> None:
     with picamera2.Picamera2() as picam2:
+        picam2_setup(picam2)
         run_camera_loop(picam2)
 
 

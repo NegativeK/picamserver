@@ -55,9 +55,19 @@ def run_camera_loop(picam2: picamera2.Picamera2) -> None:
 
 
 def main() -> None:
-    with picamera2.Picamera2() as picam2:
-        picam2_setup(picam2)
-        run_camera_loop(picam2)
+    try:
+        with picamera2.Picamera2() as picam2:
+            picam2_setup(picam2)
+            run_camera_loop(picam2)
+    except (RuntimeError, IndexError) as r_err:
+        print("\n" + "="*80)
+        print(
+            "Error when trying to set up the camera. Is it connected? Is",
+            "something else using it?",
+        )
+        print("="*80, "\n")
+
+        raise r_err
 
 
 if __name__ == "__main__":

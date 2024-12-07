@@ -37,7 +37,7 @@ def web_listening() -> bool:
         session_timestamp = datetime.datetime.fromisoformat(session_contents)
 
         if session_timestamp < oldest_session_time:
-            # TODO Log this
+            print("Removing expired session file.")
             session_file.unlink()
 
     has_files = any(config.LISTENER_PATH.iterdir())

@@ -26,5 +26,14 @@ forcibly restarted. Hit ctrl+c a lot in the screen session to kill it. The
 server will die if there are simultaneous requests against the camera. (I 
 warned you that this is gross.)
 
+# Configuration
+Defaults:
+* The image file is stored at `picamserver/data/photo.jpg`.
+* Session tokens are stored in `picamserver/listeners`.
+* Session tokens are removed by the camera daemon 30 seconds after the client stops loading images.
+* The camera daemon refreshes the image file ever 2 seconds.
+
+All of these values can be changed at the top of config.py.
+
 # Todo
 * Scale down the image via GET parameters

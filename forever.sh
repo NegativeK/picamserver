@@ -1,4 +1,4 @@
 #!/bin/bash
 cd ~/picamserver
-screen -d -m ./run_flask.sh
-screen -d -m ./run_cam.sh
+screen -d -m python3 camdaemon.py
+screen -d -m flask --app main run -h 0.0.0.0 --reload

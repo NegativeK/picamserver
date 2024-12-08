@@ -7,17 +7,16 @@ any environment that matters.
 
 # Installation
 
-Start with a clean install of [Raspberry Pi OS Lite 64bit](https://www.raspberrypi.com/software/operating-systems/), then `apt` install a bunch of stuff, clone the repo, `cd` into it and set up a python virtual envorinment, activate it and install python requirements with the following code: 
+Start with a clean install of [Raspberry Pi OS Lite 64bit](https://www.raspberrypi.com/software/operating-systems/), and `apt` install a bunch of stuff. Installs a LOT - be patient!
 
 ```
-sudo apt install -y git screen python3-picamera2 python3-dotenv    # From https://pypi.org/project/picamera2/ - installs a LOT - be patient!
+sudo apt install -y flask git screen python3-picamera2 python3-dotenv
 git clone https://github.com/NegativeK/picamserver.git
 cd picamserver
 mkdir data
-python3 -m venv --system-site-packages venv # From https://forums.raspberrypi.com/viewtopic.php?t=361758
-. venv/bin/activate
-pip install -r requirements.txt
 ```
+
+python3-picamera2 installation instructions from https://pypi.org/project/picamera2/ .
 
 # Running
 `bash forever.sh`

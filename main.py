@@ -1,65 +1,42 @@
 #!/usr/bin/env python
-import io
-import os
-import time
+import datetime
+import flask
 import uuid
 
-import flask
-import picamera2
+import config
 
 app = flask.Flask(__name__)
+# TODO Secure this.
+app.secret_key = config.get_session_key()
 
 
-def picam2_setup(picam2):
-    picam2.start_preview(picamera2.Preview.NULL)
+def ensure_listener_file():
+    if "listener" not in flask.session:
+        flask.session["listener"] = str(uuid.uuid4())
 
-    preview_config = picam2.create_preview_configuration(main={"size": (800, 600)})
-    picam2.configure(preview_config)
-
-    capture_config = picam2.create_still_configuration()
-
-    picam2.start()
-    time.sleep(1)
-
-    metadata = picam2.capture_metadata()
-    controls = {c: metadata[c] for c in ["ExposureTime", "AnalogueGain", "ColourGains"]}
-
-    picam2.set_controls(controls)
-
-    picam2.switch_mode(capture_config)
-
-
-def take_photo():
-    with picamera2.Picamera2() as picam2:
-        picam2_setup(picam2)
-
-        image = picam2.capture_image()
-
-    return image
+    now = str(datetime.datetime.now())
+    listener_file = config.LISTENER_PATH / flask.session["listener"]
+    listener_file.write_text(now)
 
 
 @app.get("/")
 def get_root():
     title = "Printer"
-    image = "./printer"
+    image_request_path = "./printer"
 
-    return flask.render_template("index.html", title=title, image=image)
+    return flask.render_template(
+        "index.html",
+        title=title,
+        image=image_request_path,
+    )
 
 
 @app.get("/printer")
 def get_print_image():
-    try:
-        image = take_photo()
-    except RuntimeError as r_err:
-        print(r_err)
-        os._exit(1)
+    ensure_listener_file()
 
-    image_io = io.BytesIO()
-    image_name = "printer.jpg"
-    image.save(image_io, format="JPEG")
-    image_io.seek(0)
-
-    return flask.send_file(
-        image_io,
+    return flask.send_from_directory(
+        config.IMAGE_FILE.parent,
+        config.IMAGE_FILE.name,
         mimetype="image/jpeg",
     )

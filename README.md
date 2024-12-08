@@ -13,7 +13,7 @@ Start with a clean install of [Raspberry Pi OS Lite 64bit](https://www.raspberry
 sudo apt install -y git screen python3-picamera2 python3-dotenv    # From https://pypi.org/project/picamera2/ - installs a LOT - be patient!
 git clone https://github.com/NegativeK/picamserver.git
 cd picamserver
-mkdir listeners && mkdir data
+mkdir data
 python3 -m venv --system-site-packages venv # From https://forums.raspberrypi.com/viewtopic.php?t=361758
 . venv/bin/activate
 pip install -r requirements.txt

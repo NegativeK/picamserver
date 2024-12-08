@@ -6,7 +6,7 @@ import secrets
 import dotenv
 
 IMAGE_FILE = pathlib.Path("./data/photo.jpg")
-LISTENER_PATH = pathlib.Path("./listeners")
+LISTENER_PATH = pathlib.Path("/tmp/listeners")
 LISTENER_AGE_SECONDS = 30
 REFRESH_INTERVAL = 2
 
@@ -25,4 +25,5 @@ def get_session_key() -> str:
     return session_key
 
 
+LISTENER_PATH.mkdir(mode=0o744, exist_ok=True)
 dotenv.load_dotenv()

@@ -18,6 +18,10 @@ mkdir data
 
 python3-picamera2 installation instructions from https://pypi.org/project/picamera2/ .
 
+Note that there's no recommendation to use a virtual environment. This code 
+assumes a Raspberry Pi and is intended to work on Raspbian, so it uses the apt
+packages.
+
 # Running
 `bash forever.sh`
 

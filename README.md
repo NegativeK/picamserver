@@ -39,5 +39,30 @@ Defaults:
 
 All of these values can be changed at the top of config.py.
 
+# Development
+Because the install just uses Debian packages, you don't need a virtual env
+to do development. However, if you would like to install the linter and type
+checker, you can follow the instructions below.
+
+To set up a development virtual environment in your local repo, run the
+following commands:
+```
+python3 -m venv venv
+. venv/bin/activate
+pip install --editable .[dev]
+```
+
+Whether you're in a virtualenv or not, you can start the processes with:
+```
+python3 camdaemon
+python3 -m flask --app main run -h 0.0.0.0 --reload
+```
+
+Linting and type checking can be done with:
+```
+ruff check *.py
+mypy *.py
+```
+
 # Todo
 * Scale down the image via GET parameters

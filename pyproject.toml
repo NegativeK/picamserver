@@ -2,7 +2,18 @@
 name = "picamserver"
 version = "0.2.0"
 description = "Provide a web interface to Pi IO"
+readme = "README.md"
+license = {file = "LICENSE"}
+
 dependencies = []
+requires-python = ">= 3.11"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
 
 [project.optional-dependencies]
 dev = [
@@ -21,7 +32,7 @@ ignore = [
 	"ANN002",
 	"ANN003",
 
- 	# Don't use numpy documentation style
+	# Don't use numpy documentation style
 	"D406",
 	"D407",
 

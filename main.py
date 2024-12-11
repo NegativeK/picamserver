@@ -10,7 +10,7 @@ app = flask.Flask(__name__)
 app.secret_key = config.get_session_key()
 
 
-def ensure_listener_file():
+def ensure_listener_file() -> None:
     if "listener" not in flask.session:
         flask.session["listener"] = str(uuid.uuid4())
 
@@ -20,7 +20,7 @@ def ensure_listener_file():
 
 
 @app.get("/")
-def get_root():
+def get_root() -> None:
     title = "Printer"
     image_request_path = "./printer"
 
@@ -32,7 +32,7 @@ def get_root():
 
 
 @app.get("/printer")
-def get_print_image():
+def get_print_image() -> None:
     ensure_listener_file()
 
     return flask.send_from_directory(

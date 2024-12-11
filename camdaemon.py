@@ -32,7 +32,7 @@ def picam2_setup(picam2: picamera2.Picamera2) -> None:
 
 
 def web_listening() -> bool:
-    current_time = datetime.datetime.now()
+    current_time = datetime.datetime.now(tz=datetime.UTC)
     oldest_session_time = current_time - datetime.timedelta(
         seconds=config.LISTENER_AGE_SECONDS,
     )

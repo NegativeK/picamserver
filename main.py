@@ -14,7 +14,7 @@ def ensure_listener_file() -> None:
     if "listener" not in flask.session:
         flask.session["listener"] = str(uuid.uuid4())
 
-    now = str(datetime.datetime.now())
+    now = str(datetime.datetime.now(tz=datetime.UTC))
     listener_file = config.LISTENER_PATH / flask.session["listener"]
     listener_file.write_text(now)
 

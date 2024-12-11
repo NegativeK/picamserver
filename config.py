@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Set and fetch configuration options and load environment variables."""
 import os
 import pathlib
 import secrets
@@ -11,6 +12,11 @@ LISTENER_AGE_SECONDS = 30
 REFRESH_INTERVAL = 2
 
 def get_session_key() -> str:
+    """Fetch (and set if necessary) the session secret key.
+
+    Returns:
+        The session key.
+    """
     session_key = os.getenv("SESSION_KEY", default=None)
 
     if session_key is None:

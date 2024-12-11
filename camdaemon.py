@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Store a camera image to the filesystem and update it on a set interval."""
 import datetime
 import time
 
@@ -8,6 +9,11 @@ import config
 
 
 def picam2_setup(picam2: picamera2.Picamera2) -> None:
+    """Set up a Picamera2 and set exposure settings.
+
+    Args:
+        picam2: The instantiated camera object.
+    """
     picam2.start_preview(picamera2.Preview.NULL)
 
     preview_config = picam2.create_preview_configuration(
@@ -32,6 +38,11 @@ def picam2_setup(picam2: picamera2.Picamera2) -> None:
 
 
 def web_listening() -> bool:
+    """Check if there's a web service with active user sessions for the image.
+
+    Returns:
+        Whether there are active use sessions.
+    """
     current_time = datetime.datetime.now(tz=datetime.UTC)
     oldest_session_time = current_time - datetime.timedelta(
         seconds=config.LISTENER_AGE_SECONDS,
@@ -51,6 +62,11 @@ def web_listening() -> bool:
 
 
 def run_camera_loop(picam2: picamera2.Picamera2) -> None:
+    """Run an infinite loop for capturing the camera image.
+
+    Args:
+        picam2: The instantiated Picamera2 object.
+    """
     while True:
         if web_listening():
             image = picam2.capture_image()
@@ -60,6 +76,7 @@ def run_camera_loop(picam2: picamera2.Picamera2) -> None:
 
 
 def main() -> None:
+    """Instantiate a Picamera2 and initiate the photo taking loop."""
     try:
         with picamera2.Picamera2() as picam2:
             picam2_setup(picam2)

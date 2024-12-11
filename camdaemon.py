@@ -10,7 +10,9 @@ import config
 def picam2_setup(picam2: picamera2.Picamera2) -> None:
     picam2.start_preview(picamera2.Preview.NULL)
 
-    preview_config = picam2.create_preview_configuration(main={"size": (800, 600)})
+    preview_config = picam2.create_preview_configuration(
+        main={"size": (800, 600)},
+    )
     picam2.configure(preview_config)
 
     capture_config = picam2.create_still_configuration()
@@ -19,7 +21,10 @@ def picam2_setup(picam2: picamera2.Picamera2) -> None:
     time.sleep(1)
 
     metadata = picam2.capture_metadata()
-    controls = {c: metadata[c] for c in ["ExposureTime", "AnalogueGain", "ColourGains"]}
+    controls = {
+        c: metadata[c]
+        for c in ["ExposureTime", "AnalogueGain", "ColourGains"]
+    }
 
     picam2.set_controls(controls)
 

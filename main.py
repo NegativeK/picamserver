@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Start a Flask server for sharing camera images."""
-import datetime
+# Ruff isn't unstanding that config is a project module instead of a system
+# module.
+import datetime # noqa: I001
 import flask
 import uuid
 

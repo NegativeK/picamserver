@@ -63,6 +63,3 @@ Linting and type checking can be done with:
 ruff check *.py
 mypy *.py
 ```
-
-# Todo
-* Scale down the image via GET parameters

@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """Set and fetch configuration options and load environment variables."""
 import os
 import pathlib

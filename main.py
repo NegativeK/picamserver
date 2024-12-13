@@ -7,7 +7,6 @@ import uuid
 import config
 
 app = flask.Flask(__name__)
-# TODO Secure this.
 app.secret_key = config.get_session_key()
 
 

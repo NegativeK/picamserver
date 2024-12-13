@@ -68,6 +68,3 @@ This will enable the virtualenv and run:
 ruff check
 mypy *.py
 ```
-
-# Todo
-* Scale down the image via GET parameters

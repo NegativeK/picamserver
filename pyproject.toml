@@ -48,5 +48,5 @@ ignore = [
 	"S108", # Remove when issue #30 is complete
 ]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"

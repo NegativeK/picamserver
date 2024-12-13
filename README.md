@@ -58,9 +58,14 @@ python3 camdaemon
 python3 -m flask --app main run -h 0.0.0.0 --reload
 ```
 
-Linting and type checking can be done with:
+If you have make installed, there is a Makefile for development. To do linting
+and type checking, you can run:
 ```
-ruff check *.py
+make static_check
+```
+This will enable the virtualenv and run:
+```
+ruff check
 mypy *.py
 ```
 

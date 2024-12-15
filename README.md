@@ -10,7 +10,7 @@ any environment that matters.
 Start with a clean install of [Raspberry Pi OS Lite 64bit](https://www.raspberrypi.com/software/operating-systems/), and `apt` install a bunch of stuff. Installs a LOT - be patient!
 
 ```
-sudo apt install -y flask git screen python3-picamera2 python3-dotenv
+sudo apt install -y python3-flask git screen python3-picamera2 python3-dotenv
 git clone https://github.com/NegativeK/picamserver.git
 cd picamserver
 mkdir data

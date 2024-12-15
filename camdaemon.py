@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 import datetime
+import multiprocessing
 import time
 
 import picamera2
 
 import config
+
+context = multiprocessing.get_context("fork")
 
 
 def picam2_setup(picam2: picamera2.Picamera2) -> None:
@@ -54,21 +57,21 @@ def run_camera_loop(picam2: picamera2.Picamera2) -> None:
         time.sleep(config.REFRESH_INTERVAL)
 
 
-def main() -> None:
-    try:
-        with picamera2.Picamera2() as picam2:
-            picam2_setup(picam2)
-            run_camera_loop(picam2)
-    except (RuntimeError, IndexError) as r_err:
-        print("\n" + "="*80)
-        print(
-            "Error when trying to set up the camera. Is it connected? Is",
-            "something else using it?",
-        )
-        print("="*80, "\n")
+class CameraProcess(context.Process):
+    def __init__(self) -> None:
+        super().__init__(daemon=True)
 
-        raise r_err
+    def run(self) -> None:
+        try:
+            with picamera2.Picamera2() as picam2:
+                picam2_setup(picam2)
+                run_camera_loop(picam2)
+        except (RuntimeError, IndexError) as r_err:
+            print("\n" + "="*80)
+            print(
+                "Error when trying to set up the camera. Is it connected? Is",
+                "something else using it?",
+            )
+            print("="*80, "\n")
 
-
-if __name__ == "__main__":
-    main()
+            raise r_err

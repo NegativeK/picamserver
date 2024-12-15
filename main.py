@@ -1,42 +1,57 @@
-#!/usr/bin/env python
-import datetime
-import flask
-import uuid
+#!/usr/bin/env python3
+# Improvements: https://stackoverflow.com/a/19929767
+import multiprocessing
+import time
+from collections.abc import Iterable
 
-import config
+import camdaemon
+import flaskapp
 
-app = flask.Flask(__name__)
-# TODO Secure this.
-app.secret_key = config.get_session_key()
-
-
-def ensure_listener_file():
-    if "listener" not in flask.session:
-        flask.session["listener"] = str(uuid.uuid4())
-
-    now = str(datetime.datetime.now())
-    listener_file = config.LISTENER_PATH / flask.session["listener"]
-    listener_file.write_text(now)
+SECONDS_TO_TERMINATION = 5
+context = multiprocessing.get_context("fork")
 
 
-@app.get("/")
-def get_root():
-    title = "Printer"
-    image_request_path = "./printer"
+def stop_processes(processes: Iterable[context.Process]) -> None:
+    """Stop running processes.
 
-    return flask.render_template(
-        "index.html",
-        title=title,
-        image=image_request_path,
-    )
+    Processes that don't finishly cleanly within 5 seconds are terminated.
+
+    Args:
+        processes: The processes to stop and potentially terminate.
+    """
+    for proc in processes:
+        if proc.is_alive():
+            print(f"waiting on {proc} to finish")
+            proc.join(SECONDS_TO_TERMINATION)
+        if proc.is_alive():
+            print(f"terminating {proc}")
+            proc.terminate()
 
 
-@app.get("/printer")
-def get_print_image():
-    ensure_listener_file()
+def main() -> None:
+    """Handle startup and shutdown of the processes."""
+    processes = []
+    process_classes = [camdaemon.CameraProcess, flaskapp.Process]
 
-    return flask.send_from_directory(
-        config.IMAGE_FILE.parent,
-        config.IMAGE_FILE.name,
-        mimetype="image/jpeg",
-    )
+    for process_class in process_classes:
+        process = process_class()
+        process.start()
+        processes.append(process)
+
+    healthy = True
+    while healthy:
+        for process in processes:
+            if process.exitcode is not None:
+                print(f"{process} has exited with code {process.exitcode}; terminating")
+                healthy = False
+
+        time.sleep(0.1)
+
+    stop_processes(processes)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        raise SystemExit(130) from None

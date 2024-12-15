@@ -13,7 +13,7 @@ Start with a clean install of [Raspberry Pi OS Lite 64bit](https://www.raspberry
 sudo apt install -y flask git screen python3-picamera2 python3-dotenv
 git clone https://github.com/NegativeK/picamserver.git
 cd picamserver
-mkdir data
+mkdir data listeners
 ```
 
 python3-picamera2 installation instructions from https://pypi.org/project/picamera2/ .
@@ -54,7 +54,7 @@ pip install --editable .[dev]
 
 Whether you're in a virtualenv or not, you can start the processes with:
 ```
-python3 camdaemon
+python3 camdaemon.py
 python3 -m flask --app main run -h 0.0.0.0 --reload
 ```
 

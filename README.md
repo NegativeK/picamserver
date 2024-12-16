@@ -61,7 +61,7 @@ python3 -m flask --app main run -h 0.0.0.0 --reload
 If you have make installed, there is a Makefile for development. To do linting
 and type checking, you can run:
 ```
-make static_check
+make static_checking
 ```
 This will enable the virtualenv and run:
 ```

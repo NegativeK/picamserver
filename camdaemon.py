@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import datetime
+import pathlib
 import time
 
 import picamera2
@@ -46,10 +47,15 @@ def web_listening() -> bool:
 
 
 def run_camera_loop(picam2: picamera2.Picamera2) -> None:
+    image_file = config.IMAGE_FILE
+
     while True:
         if web_listening():
+            tmp_image_file = pathlib.Path(f"{image_file}_tmp")
+
             image = picam2.capture_image()
-            image.save(config.IMAGE_FILE, "JPEG")
+            image.save(tmp_image_file, "JPEG")
+            tmp_image_file.rename(image_file)
 
         time.sleep(config.REFRESH_INTERVAL)
 

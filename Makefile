@@ -1,9 +1,7 @@
-VENV := . venv/bin/activate
-
 types:
-	${VENV} && mypy *.py
-	
+        ./venv/bin/mypy *.py
+
 lint:
-	${VENV} && ruff check
+        ./venv/bin/ruff check
 
 static_checking: lint types

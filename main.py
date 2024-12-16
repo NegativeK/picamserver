@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import datetime
 import flask
+import pathlib
+import tempfile
 import uuid
 
 import config
@@ -11,11 +13,18 @@ app.secret_key = config.get_session_key()
 
 
 def ensure_listener_file():
+    now = str(datetime.datetime.now())
+
     if "listener" not in flask.session:
         flask.session["listener"] = str(uuid.uuid4())
 
-    now = str(datetime.datetime.now())
     listener_file = config.LISTENER_PATH / flask.session["listener"]
+
+    with tempfile.NamedTemporaryFile(delete=False) as temp_listener_fh:
+        temp_listener = pathlib.Path(temp_listener_fh.name)
+        temp_listener.write_text(now)
+        temp_listener.rename(listener_file)
+
     listener_file.write_text(now)
 
 

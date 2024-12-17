@@ -4,6 +4,8 @@
 # module.
 import datetime # noqa: I001
 import flask
+import pathlib
+import tempfile
 import uuid
 
 import config
@@ -19,6 +21,12 @@ def ensure_listener_file() -> None:
 
     now = str(datetime.datetime.now(tz=datetime.UTC))
     listener_file = config.LISTENER_PATH / flask.session["listener"]
+
+    with tempfile.NamedTemporaryFile(delete=False) as temp_listener_fh:
+        temp_listener = pathlib.Path(temp_listener_fh.name)
+        temp_listener.write_text(now)
+        temp_listener.rename(listener_file)
+
     listener_file.write_text(now)
 
 

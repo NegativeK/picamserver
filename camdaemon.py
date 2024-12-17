@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+"""Store a camera image to the filesystem and update it on a set interval."""
 import datetime
 import pathlib
 import time
@@ -9,9 +10,16 @@ import config
 
 
 def picam2_setup(picam2: picamera2.Picamera2) -> None:
+    """Set up a Picamera2 and set exposure settings.
+
+    Args:
+        picam2: The instantiated camera object.
+    """
     picam2.start_preview(picamera2.Preview.NULL)
 
-    preview_config = picam2.create_preview_configuration(main={"size": (800, 600)})
+    preview_config = picam2.create_preview_configuration(
+        main={"size": (800, 600)},
+    )
     picam2.configure(preview_config)
 
     capture_config = picam2.create_still_configuration()
@@ -20,7 +28,10 @@ def picam2_setup(picam2: picamera2.Picamera2) -> None:
     time.sleep(1)
 
     metadata = picam2.capture_metadata()
-    controls = {c: metadata[c] for c in ["ExposureTime", "AnalogueGain", "ColourGains"]}
+    controls = {
+        c: metadata[c]
+        for c in ["ExposureTime", "AnalogueGain", "ColourGains"]
+    }
 
     picam2.set_controls(controls)
 
@@ -28,7 +39,12 @@ def picam2_setup(picam2: picamera2.Picamera2) -> None:
 
 
 def web_listening() -> bool:
-    current_time = datetime.datetime.now()
+    """Check if there's a web service with active user sessions for the image.
+
+    Returns:
+        Whether there are active use sessions.
+    """
+    current_time = datetime.datetime.now(tz=datetime.UTC)
     oldest_session_time = current_time - datetime.timedelta(
         seconds=config.LISTENER_AGE_SECONDS,
     )
@@ -47,6 +63,11 @@ def web_listening() -> bool:
 
 
 def run_camera_loop(picam2: picamera2.Picamera2) -> None:
+    """Run an infinite loop for capturing the camera image.
+
+    Args:
+        picam2: The instantiated Picamera2 object.
+    """
     image_file = config.IMAGE_FILE
 
     while True:
@@ -61,11 +82,12 @@ def run_camera_loop(picam2: picamera2.Picamera2) -> None:
 
 
 def main() -> None:
+    """Instantiate a Picamera2 and initiate the photo taking loop."""
     try:
         with picamera2.Picamera2() as picam2:
             picam2_setup(picam2)
             run_camera_loop(picam2)
-    except (RuntimeError, IndexError) as r_err:
+    except (RuntimeError, IndexError):
         print("\n" + "="*80)
         print(
             "Error when trying to set up the camera. Is it connected? Is",
@@ -73,7 +95,7 @@ def main() -> None:
         )
         print("="*80, "\n")
 
-        raise r_err
+        raise
 
 
 if __name__ == "__main__":

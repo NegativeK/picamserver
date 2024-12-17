@@ -43,7 +43,10 @@ ignore = [
 	"RET504", # Support preceding variable assignments for clarity
 	"SIM108", # No ternaries.
 	"UP015", # Allow redundant open modes for explicitness.
+
+	"T201", # Remove when issue #9 is complete
+	"S108", # Remove when issue #30 is complete
 ]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"

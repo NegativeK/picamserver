@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+"""Start a flask server for sharing camera images."""
 import datetime
 import multiprocessing
 import uuid
@@ -9,8 +9,9 @@ context = multiprocessing.get_context("fork")
 
 
 class Process(context.Process):
+    """multiprocessing class for running a flask server."""
     def __init__(self) -> None:
-        """Set up flask.
+        """Import flask (awkwardly).
 
         Because flask is multithreaded, we don't want it loading when the
         parent task imports this module. Load it after this process begins.
@@ -23,12 +24,11 @@ class Process(context.Process):
     def run(self) -> None:
         """Configure the flask application."""
         app = self.flask.Flask(__name__)
-        # TODO Secure this.
         app.secret_key = config.get_session_key()
 
 
         @app.get("/")
-        def get_root():
+        def get_root() -> None:
             title = "Printer"
             image_request_path = "./printer"
 
@@ -40,7 +40,7 @@ class Process(context.Process):
 
 
         @app.get("/printer")
-        def get_print_image():
+        def get_print_image() -> None:
             self.ensure_listener_file()
 
             return self.flask.send_from_directory(
@@ -49,10 +49,11 @@ class Process(context.Process):
                 mimetype="image/jpeg",
             )
 
-        app.run(host="0.0.0.0", port=5000)
+        # Telling ruff to ignore the following; app is still in development.
+        app.run(host="0.0.0.0", port=5000) # noqa: S104
 
 
-    def ensure_listener_file(self):
+    def ensure_listener_file(self) -> None:
         """Update the time in the listener file.
 
         Create a listener file for the session if one does not exist.
@@ -60,6 +61,6 @@ class Process(context.Process):
         if "listener" not in self.flask.session:
             self.flask.session["listener"] = str(uuid.uuid4())
 
-        now = str(datetime.datetime.now())
+        now = str(datetime.datetime.now(tz=datetime.UTC))
         listener_file = config.LISTENER_PATH / self.flask.session["listener"]
         listener_file.write_text(now)

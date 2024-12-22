@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Improvements: https://stackoverflow.com/a/19929767
+"""Start a flask server for sharing Pi functionality."""
 import multiprocessing
 import time
 from collections.abc import Iterable
@@ -29,7 +29,10 @@ def stop_processes(processes: Iterable[context.Process]) -> None:
 
 
 def main() -> None:
-    """Handle startup and shutdown of the processes."""
+    """Handle startup and shutdown of the processes.
+
+    Improvements: https://stackoverflow.com/a/19929767
+    """
     processes = []
     process_classes = [camdaemon.CameraProcess, flaskapp.Process]
 
@@ -42,7 +45,10 @@ def main() -> None:
     while healthy:
         for process in processes:
             if process.exitcode is not None:
-                print(f"{process} has exited with code {process.exitcode}; terminating")
+                print(
+                    f"{process} has exited with code {process.exitcode}; "
+                    "terminating",
+                    )
                 healthy = False
 
         time.sleep(0.1)

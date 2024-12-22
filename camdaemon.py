@@ -83,7 +83,7 @@ def run_camera_loop(picam2: picamera2.Picamera2) -> None:
         time.sleep(config.REFRESH_INTERVAL)
 
 
-class CameraProcess(context.Process):
+class CameraProcess(multiprocessing.context.Process):
     """multiprocessing class for saving picamera2 images to disk."""
 
     def __init__(self) -> None:

@@ -8,7 +8,7 @@ import config
 context = multiprocessing.get_context("fork")
 
 
-class Process(context.Process):
+class Process(multiprocessing.context.Process):
     """multiprocessing class for running a flask server."""
     def __init__(self) -> None:
         """Import flask (awkwardly).
@@ -28,7 +28,7 @@ class Process(context.Process):
 
 
         @app.get("/")
-        def get_root() -> None:
+        def get_root() -> str:
             title = "Printer"
             image_request_path = "./printer"
 
@@ -40,7 +40,7 @@ class Process(context.Process):
 
 
         @app.get("/printer")
-        def get_print_image() -> None:
+        def get_print_image() -> str:
             self.ensure_listener_file()
 
             return self.flask.send_from_directory(

@@ -11,7 +11,9 @@ SECONDS_TO_TERMINATION = 5
 context = multiprocessing.get_context("fork")
 
 
-def stop_processes(processes: Iterable[context.Process]) -> None:
+def stop_processes(
+    processes: Iterable[multiprocessing.context.Process],
+) -> None:
     """Stop running processes.
 
     Processes that don't finishly cleanly within 5 seconds are terminated.

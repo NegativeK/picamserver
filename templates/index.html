@@ -15,7 +15,7 @@
 	const loadingDiv = document.querySelector(".loadingStatus");
 	const cameraFeed = document.querySelector(".cameraFeed");
 
-    function refreshImage(imgURL) {
+	function refreshImage(imgURL) {
 		const time = new Date().getTime().toString();
 		cameraFeed.src = "./printer?" + time;
 		loadingDiv.innerHTML = time;

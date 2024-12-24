@@ -11,13 +11,12 @@
 	<div class="loadingStatus">Loading...</div>
 </body>
 <script>
-	const image_path = "{{ image }}";
 	const loadingDiv = document.querySelector(".loadingStatus");
 	const cameraFeed = document.querySelector(".cameraFeed");
 
 	function refreshImage(imgURL) {
 		const time = new Date().getTime().toString();
-		cameraFeed.src = "./printer?" + time;
+		cameraFeed.src = "{{ image }}?" + time;
 		loadingDiv.innerHTML = time;
 	}
 	refreshImage();

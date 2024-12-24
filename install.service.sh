@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# this script assumes you're:
+#   - running it from the `picamserver` repo root repository directory
+#   - logged in as the user you want to run the service as
+#   - the user you're logged in as has `sudo` permissions
+
 set -e
 
 directory=$(pwd)

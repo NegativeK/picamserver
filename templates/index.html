@@ -15,12 +15,12 @@
 	const loadingDiv = document.querySelector(".loadingStatus");
 	const cameraFeed = document.querySelector(".cameraFeed");
 
-	function refreshImage(imgURL) {
-		time = new Date().getTime();
-		cameraFeed.src = imgURL + "?" + time;
+    function refreshImage(imgURL) {
+		const time = new Date().getTime().toString();
+		cameraFeed.src = "./printer?" + time;
 		loadingDiv.innerHTML = time;
 	}
-
-	setInterval(refreshImage, 5000, image_path);
+	refreshImage();
+	setInterval(refreshImage, 5000);
 </script>
 </html>

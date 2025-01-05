@@ -35,12 +35,24 @@ assumes a Raspberry Pi and is intended to work on Raspbian, so it uses the apt
 packages.
 
 # Running
-`bash forever.sh`
 
-forever.sh runs the flask server in a screen session. If the server dies, it's
-forcibly restarted. Hit ctrl+c a lot in the screen session to kill it. The
-server will die if there are simultaneous requests against the camera. (I 
-warned you that this is gross.)
+To start services and have them run at boot, call: 
+
+`bash install.service.sh`
+
+After calling this script, to start, stop and restart the services:
+
+```shell
+# IMAGE SERVER
+sudo systemctl start picamserver-image
+sudo systemctl stop picamserver-image
+sudo systemctl status picamserver-image
+
+# WEB SERVER
+sudo systemctl start picamserver-web
+sudo systemctl stop picamserver-web
+sudo systemctl status picamserver-web
+```
 
 # Configuration
 Defaults:
@@ -79,4 +91,12 @@ This will enable the virtualenv and run:
 ```
 ruff check
 mypy *.py
+```
+
+To see logs:
+
+```shell
+journalctl --follow --unit picamserver-\*     # tail both
+journalctl --follow --unit picamserver-image  # tail just image server
+journalctl --follow --unit picamserver-web    # tail just web server
 ```

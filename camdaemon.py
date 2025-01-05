@@ -1,12 +1,14 @@
-#!/usr/bin/env python3
 """Store a camera image to the filesystem and update it on a set interval."""
 import datetime
+import multiprocessing
 import pathlib
 import time
 
 import picamera2
 
 import config
+
+context = multiprocessing.get_context("fork")
 
 
 def picam2_setup(picam2: picamera2.Picamera2) -> None:
@@ -81,22 +83,25 @@ def run_camera_loop(picam2: picamera2.Picamera2) -> None:
         time.sleep(config.REFRESH_INTERVAL)
 
 
-def main() -> None:
-    """Instantiate a Picamera2 and initiate the photo taking loop."""
-    try:
-        with picamera2.Picamera2() as picam2:
-            picam2_setup(picam2)
-            run_camera_loop(picam2)
-    except (RuntimeError, IndexError):
-        print("\n" + "="*80)
-        print(
-            "Error when trying to set up the camera. Is it connected? Is",
-            "something else using it?",
-        )
-        print("="*80, "\n")
+class CameraProcess(multiprocessing.context.Process):
+    """multiprocessing class for saving picamera2 images to disk."""
 
-        raise
+    def __init__(self) -> None:
+        """Call super's init."""
+        super().__init__(daemon=True)
 
+    def run(self) -> None:
+        """Instantiate a Picamera2 and run the photo taking loop."""
+        try:
+            with picamera2.Picamera2() as picam2:
+                picam2_setup(picam2)
+                run_camera_loop(picam2)
+        except (RuntimeError, IndexError):
+            print("\n" + "="*80)
+            print(
+                "Error when trying to set up the camera. Is it connected? Is",
+                "something else using it?",
+            )
+            print("="*80, "\n")
 
-if __name__ == "__main__":
-    main()
+            raise

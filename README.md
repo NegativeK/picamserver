@@ -35,12 +35,10 @@ assumes a Raspberry Pi and is intended to work on Raspbian, so it uses the apt
 packages.
 
 # Running
-`bash forever.sh`
+`./main.py`
 
-forever.sh runs the flask server in a screen session. If the server dies, it's
-forcibly restarted. Hit ctrl+c a lot in the screen session to kill it. The
-server will die if there are simultaneous requests against the camera. (I 
-warned you that this is gross.)
+main forks a process for the camera and a process for the flask server. If
+either one dies, main kills the other.
 
 # Configuration
 Defaults:

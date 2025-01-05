@@ -1,55 +1,65 @@
 #!/usr/bin/env python3
-"""Start a Flask server for sharing camera images."""
-# Ruff isn't unstanding that config is a project module instead of a system
-# module.
-import datetime # noqa: I001
-import flask
-import pathlib
-import tempfile
-import uuid
+"""Start a flask server for sharing Pi functionality."""
+import multiprocessing
+import time
+from collections.abc import Iterable
 
-import config
+import camdaemon
+import flaskapp
 
-app = flask.Flask(__name__)
-app.secret_key = config.get_session_key()
+SECONDS_TO_TERMINATION = 5
+context = multiprocessing.get_context("fork")
 
 
-def ensure_listener_file() -> None:
-    """Update or store the time in the session UUID file."""
-    if "listener" not in flask.session:
-        flask.session["listener"] = str(uuid.uuid4())
+def stop_processes(
+    processes: Iterable[multiprocessing.context.Process],
+) -> None:
+    """Stop running processes.
 
-    now = str(datetime.datetime.now(tz=datetime.UTC))
-    listener_file = config.LISTENER_PATH / flask.session["listener"]
+    Processes that don't finishly cleanly within 5 seconds are terminated.
 
-    with tempfile.NamedTemporaryFile(delete=False) as temp_listener_fh:
-        temp_listener = pathlib.Path(temp_listener_fh.name)
-        temp_listener.write_text(now)
-        temp_listener.rename(listener_file)
-
-    listener_file.write_text(now)
-
-
-@app.get("/")
-def get_root() -> None:
-    """GET request for the root page."""
-    title = "Printer"
-    image_request_path = "./printer"
-
-    return flask.render_template(
-        "index.html",
-        title=title,
-        image=image_request_path,
-    )
+    Args:
+        processes: The processes to stop and potentially terminate.
+    """
+    for proc in processes:
+        if proc.is_alive():
+            print(f"waiting on {proc} to finish")
+            proc.join(SECONDS_TO_TERMINATION)
+        if proc.is_alive():
+            print(f"terminating {proc}")
+            proc.terminate()
 
 
-@app.get("/printer")
-def get_print_image() -> None:
-    """Get request for the stored camera image."""
-    ensure_listener_file()
+def main() -> None:
+    """Handle startup and shutdown of the processes.
 
-    return flask.send_from_directory(
-        config.IMAGE_FILE.parent,
-        config.IMAGE_FILE.name,
-        mimetype="image/jpeg",
-    )
+    Improvements: https://stackoverflow.com/a/19929767
+    """
+    processes = []
+    process_classes = [camdaemon.CameraProcess, flaskapp.Process]
+
+    for process_class in process_classes:
+        process = process_class()
+        process.start()
+        processes.append(process)
+
+    healthy = True
+    while healthy:
+        for process in processes:
+            if process.exitcode is not None:
+                print(
+                    f"{process} has exited with code {process.exitcode}; "
+                    "terminating",
+                    )
+                healthy = False
+
+        time.sleep(0.1)
+
+    stop_processes(processes)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        raise SystemExit(130) from None

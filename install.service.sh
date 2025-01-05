@@ -7,8 +7,8 @@
 
 set -e
 
-directory=$(pwd)
-user=$(echo $USER)
+directory=$PWD
+user=$USER
 
 read -p "
 -------------------------------------------------------
@@ -59,3 +59,4 @@ journalctl --follow --unit picamserver-image  # tail just image server
 journalctl --follow --unit picamserver-web    # tail just web server
 
 "
+

@@ -5,18 +5,30 @@ It's a simple web server. It lets you view a Pi camera via a web page that
 refreshes every few seconds. It's currently hackish and shouldn't be run in
 any environment that matters.
 
+# Prerequisites 
+
+You'll need the following hardware:
+
+* Raspberry Pi - This project developed on a [Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/)
+* Raspberry Pi Camera Module - This project developed on an [HQ](https://www.amazon.com/dp/B08B1QLGHS) and a 
+ [V2](https://www.amazon.com/dp/B01ER2SKFS)
+* MicroSD Card with [Raspberry Pi OS Lite 64bit](https://www.raspberrypi.com/software/operating-systems/)
+
+Before proceeding, consider testing your camera to make sure it is wired up correctly and works. The ribbon cable
+can be easily be inserted backwards either on the Pi side or the camera side - be careful!
+
 # Installation
 
-Start with a clean install of [Raspberry Pi OS Lite 64bit](https://www.raspberrypi.com/software/operating-systems/), and `apt` install a bunch of stuff. Installs a LOT - be patient!
+The first `apt install...` call installs a LOT - be patient!
 
 ```
 sudo apt install -y python3-flask git screen python3-picamera2 python3-dotenv
 git clone https://github.com/NegativeK/picamserver.git
 cd picamserver
-mkdir data listeners
+mkdir -p data listeners
 ```
 
-python3-picamera2 installation instructions from https://pypi.org/project/picamera2/ .
+python3-picamera2 installation instructions from [PyPi](https://pypi.org/project/picamera2/) .
 
 Note that there's no recommendation to use a virtual environment. This code 
 assumes a Raspberry Pi and is intended to work on Raspbian, so it uses the apt
